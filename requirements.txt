@@ -1,0 +1,5 @@
+jusText >= 2.2.0
+pandas >= 1.0.3
+requests >= 2.23.0
+tqdm >= 4.45.0
+warcio >= 1.7.3
