@@ -13,15 +13,30 @@ Accompanying repository of our AAAI-20 paper: "[Fine-Grained Argument Unit Recog
 pip install -r requirements.txt
 ```
 
-### Download Data
+### Data Download
 
 ```
 sh download.sh
 ```
 
+### Annotations
+
+The column `merged_segments` are the gold labels, created from the 5 annotators per sample.
+
+Each entry is composed of 3 parts, resulted from the crowd annotation interface. 
+
+Example `('false', '(21,22);(49,132);', 'con;pro;')`
+
+The first part (`false` or `true`) indicates whether the annotator selected the field that no argument span can be detected. (`false` means there was an argument span selected)
+
+The second part are the positions (in characters) of the argument segment(s) within the sentence in the form `(start_of_segment,length_of_segment)` separated with `;` if there are several segments.
+
+The third part are the corresponding stance labels (`con` or `pro`) for the argument segment(s).
+
+
 ### Citation
 
-If you find this dataset helpful, feel free to cite our publication
+If you find this dataset helpful, please cite our publication.
 
 ``` 
 @inproceedings{trautmann2020fine,
