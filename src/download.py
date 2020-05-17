@@ -32,8 +32,7 @@ def download_page(common_crawl_data):
     return uri, page
 
 
-if __name__ == "__main__":
-
+def main():
     parser = argparse.ArgumentParser(description='Data Download for Fine-Grained Argument Unit Recognition and Classification')
     parser.add_argument('-d', '--data', type=str, default='data/AURC_DATA.tsv', help='Location of the AURC dataset.')
     parser.add_argument('-t', '--topic', type=str, required=True, help='One of the eight topics to download.')
@@ -83,3 +82,5 @@ if __name__ == "__main__":
             time.sleep( args.wait )
 
 
+if __name__ == "__main__":
+    main()
