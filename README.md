@@ -34,6 +34,18 @@ The second part are the positions (in characters) of the argument segment(s) wit
 The third part are the corresponding stance labels (`con` or `pro`) for the argument segment(s).
 
 
+### Data Preparation
+
+```
+python3 preparation.py
+```
+
+### Trainining & Inference
+
+```
+sh run.sh
+```
+
 ### Citation
 
 If you find this dataset helpful, please cite our publication.
