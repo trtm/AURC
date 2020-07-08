@@ -130,6 +130,8 @@ def main():
     parser.add_argument('--eval_batch_size', type=int, default=1, help='Your evaluation set batch size.')
     parser.add_argument('--test_batch_size', type=int, default=1, help='Your test set batch size.')
     parser.add_argument('--target_domain', type=str, default='In-Domain', help='In-Domain OR Cross-Domain')
+    parser.add_argument('--input_file', type=str, default='AURC_DATA_dict.json', help='The input dict file.')
+    parser.add_argument('--data_dir', type=str, default='./data/', help='The data directory.')
     parser.add_argument('--output_dir', type=str, default='./models/', help='The output directory of the model, config and predictions.')
     parser.add_argument('--pretrained_weights', type=str, default='bert-large-cased-whole-word-masking', help='The pretrained bert model.')
     parser.add_argument("--fine_tuning", default=True, action="store_true" , help="Flag for full fine-tuning.")
@@ -158,7 +160,9 @@ def main():
 
     #############################################################################
     # Load Data
-    with open('./data/AURC_DATA_dict.json','r') as my_file:
+    fname = os.path.join(args.data_dir, args.input_file)
+    print(fname)
+    with open(fname,'r') as my_file:
         AURC_DATA_dict = json.load(my_file)
     print(len(AURC_DATA_dict), [len(AURC_DATA_dict[topic]) for topic in AURC_DATA_dict.keys()])
 
@@ -294,38 +298,27 @@ def main():
             model, optimizer, scheduler, tr_loss = training(train_dataloader, model=model, device=device, optimizer=optimizer, scheduler=scheduler, max_grad_norm=args.max_grad_norm)
             
             # EVALUATION: TRAIN SET
-            #y_true_train, y_pred_train, all_input_ids_train, all_input_tokens_train, seq_eval_AS_train, p_train, r_train, f1s_train = evaluation(
             y_true_train, y_pred_train, p_train, r_train, f1s_train = evaluation(
                     train_dataloader, model=model, device=device, tokenizer=tokenizer)
-            #print("TRAIN:  Acc. %.3f | Pre. %.3f | Rec. %.3f | F1 %.3f"%(seq_eval_AS_train, p_train, r_train, f1s_train))
             print("TRAIN:  Pre. %.3f | Rec. %.3f | F1 %.3f"%(p_train, r_train, f1s_train))
             
             # EVALUATION: DEV SET
-            #y_true_dev, y_pred_dev, all_input_ids_dev, all_input_tokens_dev, seq_eval_AS_dev, p_dev, r_dev, f1s_dev = evaluation(
             y_true_dev, y_pred_dev, p_dev, r_dev, f1s_dev = evaluation(
                     eval_dataloader, model=model, device=device, tokenizer=tokenizer)
-            #print("EVAL:   Acc. %.3f | Pre. %.3f | Rec. %.3f | F1 %.3f | BEST F1: %.3f"%(seq_eval_AS_dev, p_dev, r_dev, f1s_dev, best_f1s_dev))
             print("EVAL:   Pre. %.3f | Rec. %.3f | F1 %.3f | BEST F1: %.3f"%(p_dev, r_dev, f1s_dev, best_f1s_dev), best_epoch)
             
             if f1s_dev > best_f1s_dev:
                 best_f1s_dev = f1s_dev
-                best_p_dev = p_dev
-                best_r_dev = r_dev
-                best_y_true_dev = y_true_dev
-                best_y_pred_dev = y_pred_dev
+                best_epoch = epoch
                 
                 # EVALUATION: TEST SET
-                #y_true_test, y_pred_test, all_input_ids_test, all_input_tokens_test, seq_eval_AS_test, p_test, r_test, f1s_test = evaluation(
                 y_true_test, y_pred_test, p_test, r_test, f1s_test = evaluation(
                         test_dataloader, model=model, device=device, tokenizer=tokenizer)
-                #print("TEST:   Acc. %.3f | Pre. %.3f | Rec. %.3f | F1 %.3f"%(seq_eval_AS_test, p_test, r_test, f1s_test))
                 print("TEST:   Pre. %.3f | Rec. %.3f | F1 %.3f"%(p_test, r_test, f1s_test))
-                best_epoch = epoch
                 
                 if args.save_model:
                     # Save Model
                     torch.save( model.state_dict(), MODEL_PATH )
-                    
                     # Save Config
                     with open(CONFIG_PATH, 'w') as f:
                         json.dump(config.to_json_string(), f, sort_keys=True, indent=4, separators=(',', ': '))
@@ -353,11 +346,10 @@ def main():
             num_labels=args.num_labels, 
             output_hidden_states=False, 
             use_crf=args.crf)
-        model.to(device)
         model.load_state_dict( torch.load(MODEL_PATH) )
         model.to(device)
 
-        print("\nInference:\n\n")
+        print("\nInference:\n")
 
         # EVALUATION: TRAIN SET
         y_true_train, y_pred_train, p_train, r_train, f1s_train = evaluation(
