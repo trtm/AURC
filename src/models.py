@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+##!/usr/bin/env python
 
 import torch
 from torch import nn
@@ -44,7 +44,7 @@ class TokenBERT(nn.Module):
                 return self.crf.decode(logits, attention_mask.byte())
         else:
             if labels is not None: # training
-                loss_fct = CrossEntropyLoss()
+                loss_fct = nn.CrossEntropyLoss()
                 loss = loss_fct(
                     logits.view(-1, self.num_labels),
                     labels.view(-1)

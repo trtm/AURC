@@ -2,6 +2,7 @@
 
 python3 src/run_AURC_token.py \
     --card_number=1 \
-    --target_domain='Cross-Domain'
-#    --train \
-#    --target_domain='In-Domain'
+    --train \
+    --crf \
+    --target_domain='In-Domain' \
+#    --target_domain='Cross-Domain' \

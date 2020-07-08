@@ -9,10 +9,6 @@ import numpy as np
 import pandas as pd
 import datetime as dt
 
-from operator import itemgetter
-from collections import Counter
-from itertools import chain
-
 from sty import fg, bg, ef, rs, RgbFg
 
 import spacy
@@ -28,12 +24,9 @@ from torch.nn import CrossEntropyLoss
 from torch.utils.data import (TensorDataset, DataLoader,
                               RandomSampler, SequentialSampler)
 
-
 from transformers import (AdamW, BertConfig, BertTokenizer,
                           get_linear_schedule_with_warmup,
                           BertModel, BertPreTrainedModel)
-
-from torchcrf import CRF as PyTorchCRF
 
 from utils import InputFeatures, get_data_with_labels
 
@@ -140,7 +133,7 @@ def main():
     parser.add_argument('--output_dir', type=str, default='./models/', help='The output directory of the model, config and predictions.')
     parser.add_argument('--pretrained_weights', type=str, default='bert-large-cased-whole-word-masking', help='The pretrained bert model.')
     parser.add_argument("--fine_tuning", default=True, action="store_true" , help="Flag for full fine-tuning.")
-    parser.add_argument("--crf", default=True, action="store_true" , help="Flag for CRF useage.")
+    parser.add_argument("--crf", default=False, action="store_true" , help="Flag for CRF useage.")
     parser.add_argument("--train", default=False, action="store_true" , help="Flag for training.")
     parser.add_argument("--eval", default=True, action="store_true" , help="Flag for evaluation.")
     parser.add_argument("--save_model", default=True, action="store_true" , help="Flag for saving.")
