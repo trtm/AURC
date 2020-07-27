@@ -1,5 +1,5 @@
 # AURC
-Accompanying repository of our AAAI-20 paper: "[Fine-Grained Argument Unit Recognition and Classification](https://aaai.org/Papers/AAAI/2020GB/AAAI-TrautmannD.7498.pdf)".
+Accompanying repository of our AAAI-20 paper: "[Fine-Grained Argument Unit Recognition and Classification](https://doi.org/10.1609/aaai.v34i05.6438)".
 
 > ⚠️ The dataset was updated (cleaner parsing and encoding) and is not similar to the original one in the paper. 
 
